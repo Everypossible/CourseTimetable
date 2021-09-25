@@ -35,4 +35,13 @@ export default {
   margin-left: auto;
   font-size: 14px;
 }
+.table-header .right span {
+  display: inline-block;
+}
+.table-header .right span:nth-child(2n) {
+  margin-right: 25px;
+}
+.table-header .right i:nth-child(odd) {
+  margin-right: 5px;
+}
 </style>

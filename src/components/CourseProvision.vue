@@ -49,7 +49,7 @@
       <el-table-column prop="regenerator" label="更新者" width="120"> </el-table-column>
       <el-table-column prop="updateTime" label="更新时间" width="120" sortable> </el-table-column>
     </el-table>
-    <div>共<input v-model="totalRow">条</div>
+    <div>共 {{ totalRow }} 条</div>
   </div>
 </template>
 
@@ -58,7 +58,6 @@ export default {
   name: "CourseProvision",
   data() {
     return {
-      totalRow: 0,
       input: "",
       checked: true,
       tableData: [
@@ -134,6 +133,12 @@ export default {
     },
     formatter(row) {
       return row.school;
+    },
+  },
+
+  computed: {
+    totalRow(){
+      return this.tableData.length;
     },
   },
 };

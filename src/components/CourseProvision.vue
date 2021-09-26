@@ -7,12 +7,11 @@
       <el-input v-model="input" placeholder="请输入班级名称"></el-input>
     </div>
     <div class="search-second-row">
-      <div class="input">
         <el-input v-model="input" placeholder="请输入课程名称"></el-input>
         <el-input v-model="input" placeholder="请输入教师名称"></el-input>
-      </div>
-      <el-button type="danger">查询</el-button>
-      <el-checkbox v-model="checked">仅显示当前学期的作业安排</el-checkbox>
+        <!-- </div> -->
+        <div><el-button type="danger">查询</el-button></div>
+        <el-checkbox v-model="checked">仅显示当前学期的作业安排</el-checkbox>
     </div>
     <div class="opration">
       <el-button type="primary" icon="el-icon-plus" plain>添加</el-button>
@@ -33,7 +32,8 @@
       <el-table-column prop="term" label="学期" width="120" sortable>
         <template slot-scope="scope">{{ scope.row.term }}</template>
       </el-table-column>
-      <el-table-column prop="courseName" label="课程名称" width="120" sortable> </el-table-column>
+      <el-table-column prop="courseName" label="课程名称" width="120" sortable>
+      </el-table-column>
       <el-table-column
         prop="school"
         label="学校"
@@ -41,13 +41,19 @@
         :formatter="formatter"
       >
       </el-table-column>
-      <el-table-column prop="college" label="学院名称" width="120"> </el-table-column>
+      <el-table-column prop="college" label="学院名称" width="120">
+      </el-table-column>
       <el-table-column prop="major" label="专业" width="120"> </el-table-column>
-      <el-table-column prop="className" label="班级名称" width="120"> </el-table-column>
-      <el-table-column prop="teacherName" label="教师姓名" width="120"> </el-table-column>
-      <el-table-column prop="homework" label="作业表" width="120"> </el-table-column>
-      <el-table-column prop="regenerator" label="更新者" width="120"> </el-table-column>
-      <el-table-column prop="updateTime" label="更新时间" width="120" sortable> </el-table-column>
+      <el-table-column prop="className" label="班级名称" width="120">
+      </el-table-column>
+      <el-table-column prop="teacherName" label="教师姓名" width="120">
+      </el-table-column>
+      <el-table-column prop="homework" label="作业表" width="120">
+      </el-table-column>
+      <el-table-column prop="regenerator" label="更新者" width="120">
+      </el-table-column>
+      <el-table-column prop="updateTime" label="更新时间" width="120" sortable>
+      </el-table-column>
     </el-table>
     <div>共 {{ totalRow }} 条</div>
   </div>
@@ -72,7 +78,6 @@ export default {
           homework: "C语言题库2021年秋",
           regenerator: "苏定方",
           updateTime: "2021-07-25",
-
         },
         {
           term: "2021年春",
@@ -85,7 +90,6 @@ export default {
           homework: "JAVA语言题库2021年春",
           regenerator: "苏号",
           updateTime: "2021-02-25",
-
         },
         {
           term: "2021年春",
@@ -98,7 +102,6 @@ export default {
           homework: "C语言题库2021年春",
           regenerator: "苏定方",
           updateTime: "2021-03-25",
-
         },
         {
           term: "2020年秋",
@@ -111,9 +114,7 @@ export default {
           homework: "Python语言题库2020年秋",
           regenerator: "苏定方",
           updateTime: "2020-07-25",
-
         },
-        
       ],
       multipleSelection: [],
     };
@@ -137,7 +138,7 @@ export default {
   },
 
   computed: {
-    totalRow(){
+    totalRow() {
       return this.tableData.length;
     },
   },
@@ -145,11 +146,18 @@ export default {
 </script>
 
 <style>
-.search-first-row {
+.search-first-row,
+.search-second-row {
   display: flex;
+  margin-bottom: 10px;
 }
-.search-second-row .input {
-  width: 300px;
-  display: flex;
+.search-first-row > * ,
+.search-second-row > * {
+  margin-right: 10px;
+  width: 310px;
+}
+
+.opration {
+  margin-bottom: 10px;
 }
 </style>

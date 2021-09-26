@@ -1,12 +1,16 @@
 import Vue from 'vue'
 import App from './App.vue'
 // 按需引入组件
-import {Button, Input, Checkbox, Table, TableColumn} from 'element-ui'
+import {Container, Header, Aside, Main, Button, Input, Checkbox, Table, TableColumn} from 'element-ui'
 // 引入下载的阿里巴巴图标
 import './assets/icons/iconfont.css'
 
 Vue.config.productionTip = false
 
+Vue.component(Container.name, Container)
+Vue.component(Header.name, Header)
+Vue.component(Aside.name, Aside)
+Vue.component(Main.name, Main)
 Vue.component(Button.name, Button)
 Vue.component(Input.name, Input)
 Vue.component(Checkbox.name,Checkbox)

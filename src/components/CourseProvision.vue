@@ -25,7 +25,7 @@
       tooltip-effect="dark"
       style="width: 100%"
       border
-      :default-sort="{ prop: 'term', order: 'descending' }"
+      :default-sort="{ prop: 'updateTime', order: 'descending' }"
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55"> </el-table-column>
@@ -47,7 +47,7 @@
       <el-table-column prop="teacherName" label="教师姓名" width="120"> </el-table-column>
       <el-table-column prop="homework" label="作业表" width="120"> </el-table-column>
       <el-table-column prop="regenerator" label="更新者" width="120"> </el-table-column>
-      <el-table-column prop="updateTime" label="更新时间" width="120"> </el-table-column>
+      <el-table-column prop="updateTime" label="更新时间" width="120" sortable> </el-table-column>
     </el-table>
     <div>共<input v-model="totalRow">条</div>
   </div>

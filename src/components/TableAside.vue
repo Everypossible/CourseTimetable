@@ -20,8 +20,9 @@ export default {
 <style>
 .table-aside {
   /* position: relative; */
-  width: 100px;
-  height: 600px;
+  margin-left: 20px;
+  width: 180px;
+  height: calc(100vh - 80px);
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
 }
@@ -30,7 +31,21 @@ export default {
   top: 30px;
 } */
 .table-aside div{
-  padding-top: 30px;
+  position: relative;
+  height: 60px;
+  /* padding-top: 30px; */
+  padding-left: 10px;
+  line-height: 60px;
+  cursor: pointer;
+}
+
+.table-aside div:hover {
+  background-color: coral;
+}
+
+.table-aside div i {
+  position: absolute;
+  right: 10px;
 }
 
 </style>

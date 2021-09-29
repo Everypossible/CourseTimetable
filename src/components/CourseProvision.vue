@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div v-show="courseProvision_visible">
     <div class="search-first-row">
       <el-input v-model="input" placeholder="请输入学校名称"></el-input>
       <el-input v-model="input" placeholder="请输入学院名称"></el-input>
@@ -14,7 +15,7 @@
       <el-checkbox v-model="checked">仅显示当前学期的作业安排</el-checkbox>
     </div>
     <div class="opration">
-      <el-button type="primary" icon="el-icon-plus" plain @click="showDialog(true)">添加</el-button>
+      <el-button type="primary" icon="el-icon-plus" plain @click="showChange">添加</el-button>
       <el-button type="success" icon="el-icon-edit" plain>修改</el-button>
       <el-button type="danger" icon="el-icon-delete" plain>删除</el-button>
     </div>
@@ -56,6 +57,7 @@
       </el-table-column>
     </el-table>
     <div>共 {{ totalRow }} 条</div>
+    </div>
     <AddCourse v-show="dialog_visible"/>
   </div>
 </template>
@@ -75,6 +77,7 @@ export default {
       input: "",
       checked: true,
       dialog_visible: false,
+      courseProvision_visible: true,
       tableData: [
         {
           term: "2021年秋",
@@ -144,9 +147,13 @@ export default {
     formatter(row) {
       return row.school;
     },
-    showDialog(visible) {
-      this.dialog_visible = visible;
-    },
+    // showDialog(visible) {
+    //   this.dialog_visible = visible;
+    // },
+    showChange() {
+      this.courseProvision_visible = false;
+      this.dialog_visible = true;
+    }
   },
 
   computed: {
@@ -158,7 +165,6 @@ export default {
   mounted() {
     let _this = this;
     pubsub.subscribe('addNewCourse', function(msgName, data){
-      _this.dialog_visible = false;
       console.log(data);
       let tableDataObj = {};
 
@@ -183,12 +189,14 @@ export default {
 
       console.log(tableDataObj);
       _this.tableData.unshift(tableDataObj);
+      _this.dialog_visible = false;
+      _this.courseProvision_visible = true;
     });
   }
 }
 </script>
 
-<style>
+<style scoped>
 .search-first-row,
 .search-second-row {
   display: flex;

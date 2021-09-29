@@ -7,14 +7,14 @@
       <el-input v-model="input" placeholder="请输入班级名称"></el-input>
     </div>
     <div class="search-second-row">
-        <el-input v-model="input" placeholder="请输入课程名称"></el-input>
-        <el-input v-model="input" placeholder="请输入教师名称"></el-input>
-        <!-- </div> -->
-        <div><el-button type="danger">查询</el-button></div>
-        <el-checkbox v-model="checked">仅显示当前学期的作业安排</el-checkbox>
+      <el-input v-model="input" placeholder="请输入课程名称"></el-input>
+      <el-input v-model="input" placeholder="请输入教师名称"></el-input>
+      <!-- </div> -->
+      <div><el-button type="danger">查询</el-button></div>
+      <el-checkbox v-model="checked">仅显示当前学期的作业安排</el-checkbox>
     </div>
     <div class="opration">
-      <el-button type="primary" icon="el-icon-plus" plain>添加</el-button>
+      <el-button type="primary" icon="el-icon-plus" plain @click="showDialog(true)">添加</el-button>
       <el-button type="success" icon="el-icon-edit" plain>修改</el-button>
       <el-button type="danger" icon="el-icon-delete" plain>删除</el-button>
     </div>
@@ -56,16 +56,25 @@
       </el-table-column>
     </el-table>
     <div>共 {{ totalRow }} 条</div>
+    <AddCourse v-show="dialog_visible"/>
   </div>
 </template>
 
 <script>
+import AddCourse from "./AddCourse.vue";
+import pubsub from "pubsub-js";
+
 export default {
   name: "CourseProvision",
+  components: {
+    AddCourse,
+  },
+
   data() {
     return {
       input: "",
       checked: true,
+      dialog_visible: false,
       tableData: [
         {
           term: "2021年秋",
@@ -135,6 +144,9 @@ export default {
     formatter(row) {
       return row.school;
     },
+    showDialog(visible) {
+      this.dialog_visible = visible;
+    },
   },
 
   computed: {
@@ -142,7 +154,38 @@ export default {
       return this.tableData.length;
     },
   },
-};
+
+  mounted() {
+    let _this = this;
+    pubsub.subscribe('addNewCourse', function(msgName, data){
+      _this.dialog_visible = false;
+      console.log(data);
+      let tableDataObj = {};
+
+      tableDataObj.school = data.school;
+      tableDataObj.term = data.term;
+      tableDataObj.courseName = data.courseName;
+      tableDataObj.teacherName = data.teacher;
+
+
+      for(let i = 0; i < data.college.length; i++) {
+        tableDataObj.college = data.college[i];
+        for(let j = 0; j < data.major.length; j++) {
+          tableDataObj.major = data.major[j];
+          for(let a = 0; a < data.classNameSelected.length; a++){
+            tableDataObj.className = data.classNameSelected[a].className;
+            for(let b = 0; b < data.homeworkSelected.length; b++) {
+              tableDataObj.homework = data.homeworkSelected[b].homework;
+            }
+          }
+        }
+      }
+
+      console.log(tableDataObj);
+      _this.tableData.unshift(tableDataObj);
+    });
+  }
+}
 </script>
 
 <style>
@@ -151,7 +194,7 @@ export default {
   display: flex;
   margin-bottom: 10px;
 }
-.search-first-row > * ,
+.search-first-row > *,
 .search-second-row > * {
   margin-right: 10px;
   width: 310px;

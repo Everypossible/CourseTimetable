@@ -192,7 +192,9 @@
           <el-button type="primary" @click="submitForm('addCourseForm')"
             >确定</el-button
           >
-          <el-button @click="resetForm('addCourseForm')" style="margin-left: 40px">返回</el-button>
+          <!-- 重置表单 -->
+          <!-- <el-button @click="resetForm('addCourseForm')" style="margin-left: 40px">返回</el-button> -->
+           <el-button @click="hideChange" style="margin-left: 40px">返回</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -408,6 +410,9 @@ export default {
     homeworkFormSubmit() {
         this.homeworkFormVisible = false;
         this.addCourseForm.homeworkSelected = Array.from(this.multipleSelection);
+    },
+    hideChange(){
+      pubsub.publish('showCourseProvision', true)
     }
   },
 

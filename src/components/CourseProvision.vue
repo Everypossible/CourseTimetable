@@ -153,7 +153,8 @@ export default {
     showChange() {
       this.courseProvision_visible = false;
       this.dialog_visible = true;
-    }
+    },
+    
   },
 
   computed: {
@@ -192,6 +193,13 @@ export default {
       _this.dialog_visible = false;
       _this.courseProvision_visible = true;
     });
+
+    pubsub.subscribe('showCourseProvision', function(msgName, data) {
+      if(data) {
+        _this.dialog_visible = false;
+        _this.courseProvision_visible = true;
+      }
+    })
   }
 }
 </script>

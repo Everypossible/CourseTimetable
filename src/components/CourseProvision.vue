@@ -1,64 +1,83 @@
 <template>
   <div>
     <div v-show="courseProvision_visible">
-    <div class="search-first-row">
-      <el-input v-model="input" placeholder="请输入学校名称"></el-input>
-      <el-input v-model="input" placeholder="请输入学院名称"></el-input>
-      <el-input v-model="input" placeholder="请输入专业名称"></el-input>
-      <el-input v-model="input" placeholder="请输入班级名称"></el-input>
-    </div>
-    <div class="search-second-row">
-      <el-input v-model="input" placeholder="请输入课程名称"></el-input>
-      <el-input v-model="input" placeholder="请输入教师名称"></el-input>
-      <!-- </div> -->
-      <div><el-button type="danger">查询</el-button></div>
-      <el-checkbox v-model="checked">仅显示当前学期的作业安排</el-checkbox>
-    </div>
-    <div class="opration">
-      <el-button type="primary" icon="el-icon-plus" plain @click="showChange">添加</el-button>
-      <el-button type="success" icon="el-icon-edit" plain>修改</el-button>
-      <el-button type="danger" icon="el-icon-delete" plain>删除</el-button>
-    </div>
-    <el-table
-      ref="multipleTable"
-      :data="tableData"
-      tooltip-effect="dark"
-      style="width: 100%"
-      border
-      :default-sort="{ prop: 'updateTime', order: 'descending' }"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column type="index" label="序号"> </el-table-column>
-      <el-table-column prop="term" label="学期" width="120" sortable>
-        <template slot-scope="scope">{{ scope.row.term }}</template>
-      </el-table-column>
-      <el-table-column prop="courseName" label="课程名称" width="120" sortable>
-      </el-table-column>
-      <el-table-column
-        prop="school"
-        label="学校"
-        show-overflow-tooltip
-        :formatter="formatter"
+      <div class="search-first-row">
+        <el-input v-model="input" placeholder="请输入学校名称"></el-input>
+        <el-input v-model="input" placeholder="请输入学院名称"></el-input>
+        <el-input v-model="input" placeholder="请输入专业名称"></el-input>
+        <el-input v-model="input" placeholder="请输入班级名称"></el-input>
+      </div>
+      <div class="search-second-row">
+        <el-input v-model="input" placeholder="请输入课程名称"></el-input>
+        <el-input v-model="input" placeholder="请输入教师名称"></el-input>
+        <!-- </div> -->
+        <div><el-button type="danger">查询</el-button></div>
+        <el-checkbox v-model="checked">仅显示当前学期的作业安排</el-checkbox>
+      </div>
+      <div class="opration">
+        <el-button type="primary" icon="el-icon-plus" plain @click="showChange"
+          >添加</el-button
+        >
+        <el-button type="success" icon="el-icon-edit" plain>修改</el-button>
+        <el-button
+          type="danger"
+          icon="el-icon-delete"
+          plain
+          @click="deleteRecord"
+          >删除</el-button
+        >
+      </div>
+      <el-table
+        ref="multipleTable"
+        :data="tableData"
+        tooltip-effect="dark"
+        style="width: 100%"
+        border
+        :default-sort="{ prop: 'updateTime', order: 'descending' }"
+        @selection-change="handleSelectionChange"
       >
-      </el-table-column>
-      <el-table-column prop="college" label="学院名称" width="120">
-      </el-table-column>
-      <el-table-column prop="major" label="专业" width="120"> </el-table-column>
-      <el-table-column prop="className" label="班级名称" width="120">
-      </el-table-column>
-      <el-table-column prop="teacherName" label="教师姓名" width="120">
-      </el-table-column>
-      <el-table-column prop="homework" label="作业表" width="120">
-      </el-table-column>
-      <el-table-column prop="regenerator" label="更新者" width="120">
-      </el-table-column>
-      <el-table-column prop="updateTime" label="更新时间" width="120" sortable>
-      </el-table-column>
-    </el-table>
-    <div>共 {{ totalRow }} 条</div>
+        <el-table-column type="selection" width="55"> </el-table-column>
+        <el-table-column type="index" label="序号"> </el-table-column>
+        <el-table-column prop="term" label="学期" width="120" sortable>
+          <template slot-scope="scope">{{ scope.row.term }}</template>
+        </el-table-column>
+        <el-table-column
+          prop="courseName"
+          label="课程名称"
+          width="120"
+          sortable
+        >
+        </el-table-column>
+        <el-table-column
+          prop="school"
+          label="学校"
+          show-overflow-tooltip
+          :formatter="formatter"
+        >
+        </el-table-column>
+        <el-table-column prop="college" label="学院名称" width="120">
+        </el-table-column>
+        <el-table-column prop="major" label="专业" width="120">
+        </el-table-column>
+        <el-table-column prop="className" label="班级名称" width="120">
+        </el-table-column>
+        <el-table-column prop="teacherName" label="教师姓名" width="120">
+        </el-table-column>
+        <el-table-column prop="homework" label="作业表" width="120">
+        </el-table-column>
+        <el-table-column prop="regenerator" label="更新者" width="120">
+        </el-table-column>
+        <el-table-column
+          prop="updateTime"
+          label="更新时间"
+          width="120"
+          sortable
+        >
+        </el-table-column>
+      </el-table>
+      <div>共 {{ totalRow }} 条</div>
     </div>
-    <AddCourse v-show="dialog_visible"/>
+    <AddCourse v-show="dialog_visible" />
   </div>
 </template>
 
@@ -129,6 +148,7 @@ export default {
         },
       ],
       multipleSelection: [],
+      // tableDatakey: 0,
     };
   },
   methods: {
@@ -143,6 +163,7 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+      // console.log(this.multipleSelection);
     },
     formatter(row) {
       return row.school;
@@ -154,7 +175,20 @@ export default {
       this.courseProvision_visible = false;
       this.dialog_visible = true;
     },
-    
+    // 删除课程
+    deleteRecord() {
+      let _this = this;
+      // 1、获取选中的数组元素
+      // 2、删除原来数据数组与1中获得的元素相同的元素
+      // this.tableDataKey = Math.random();
+      let newdataTable = this.tableData.filter((item) => !_this.multipleSelection.includes(item));
+      // console.log(
+      //   newdataTable
+      // );
+      this.tableData = newdataTable;
+      // this.tableData.filter((item) => !_this.multipleSelection.includes(item));
+      // this.$set(this.tableData, this.tableData.filter((item) => _this.multipleSelection.includes(item)), null);
+    },
   },
 
   computed: {
@@ -165,7 +199,7 @@ export default {
 
   mounted() {
     let _this = this;
-    pubsub.subscribe('addNewCourse', function(msgName, data){
+    pubsub.subscribe("addNewCourse", function (msgName, data) {
       console.log(data);
       let tableDataObj = {};
 
@@ -174,14 +208,13 @@ export default {
       tableDataObj.courseName = data.courseName;
       tableDataObj.teacherName = data.teacher;
 
-
-      for(let i = 0; i < data.college.length; i++) {
+      for (let i = 0; i < data.college.length; i++) {
         tableDataObj.college = data.college[i];
-        for(let j = 0; j < data.major.length; j++) {
+        for (let j = 0; j < data.major.length; j++) {
           tableDataObj.major = data.major[j];
-          for(let a = 0; a < data.classNameSelected.length; a++){
+          for (let a = 0; a < data.classNameSelected.length; a++) {
             tableDataObj.className = data.classNameSelected[a].className;
-            for(let b = 0; b < data.homeworkSelected.length; b++) {
+            for (let b = 0; b < data.homeworkSelected.length; b++) {
               tableDataObj.homework = data.homeworkSelected[b].homework;
             }
           }
@@ -194,14 +227,23 @@ export default {
       _this.courseProvision_visible = true;
     });
 
-    pubsub.subscribe('showCourseProvision', function(msgName, data) {
-      if(data) {
+    pubsub.subscribe("showCourseProvision", function (msgName, data) {
+      if (data) {
         _this.dialog_visible = false;
         _this.courseProvision_visible = true;
       }
-    })
-  }
-}
+    });
+  },
+
+  // watch: {
+  //   tableData: {
+  //     deep: true,
+  //     function(newValue) {
+  //       this.tableData = newValue;
+  //     },
+  //   },
+  // },
+};
 </script>
 
 <style scoped>

@@ -385,11 +385,18 @@ export default {
         }
       }
     },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+    // 确认添加表单的按钮
     submitForm(formName) {
       // let _this = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          pubsub.publish('addNewCourse', this.addCourseForm);
+          // this.$options.methods.resetForm(formName);
+          pubsub.publish('addNewCourse', this.addCourseForm);     
+          // 确认提交添加的课程后清空表单域
+          this.$refs.addCourseForm.resetFields();
           alert("submit!");
           // _this.
         } else {
@@ -398,10 +405,6 @@ export default {
         }
       });
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
-    },
-
     classNameFormSubmit(){
         this.classNameFormVisible = false;
         this.addCourseForm.classNameSelected = Array.from(this.multipleSelection);
@@ -412,7 +415,7 @@ export default {
         this.addCourseForm.homeworkSelected = Array.from(this.multipleSelection);
     },
     hideChange(){
-      pubsub.publish('showCourseProvision', true)
+      pubsub.publish('showCourseProvision', true);
     }
   },
 

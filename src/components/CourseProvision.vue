@@ -2,14 +2,14 @@
   <div>
     <div v-show="courseProvision_visible">
       <div class="search-first-row">
-        <el-input v-model="input" placeholder="请输入学校名称"></el-input>
-        <el-input v-model="input" placeholder="请输入学院名称"></el-input>
-        <el-input v-model="input" placeholder="请输入专业名称"></el-input>
-        <el-input v-model="input" placeholder="请输入班级名称"></el-input>
+        <el-input v-model="schoolInput" placeholder="请输入学校名称"></el-input>
+        <el-input v-model="collegeInput" placeholder="请输入学院名称"></el-input>
+        <el-input v-model="majorInput" placeholder="请输入专业名称"></el-input>
+        <el-input v-model="classNameInput" placeholder="请输入班级名称"></el-input>
       </div>
       <div class="search-second-row">
-        <el-input v-model="input" placeholder="请输入课程名称"></el-input>
-        <el-input v-model="input" placeholder="请输入教师名称"></el-input>
+        <el-input v-model="courseInput" placeholder="请输入课程名称"></el-input>
+        <el-input v-model="teacherInput" placeholder="请输入教师名称"></el-input>
         <!-- </div> -->
         <div><el-button type="danger">查询</el-button></div>
         <el-checkbox v-model="checked">仅显示当前学期的作业安排</el-checkbox>
@@ -18,7 +18,13 @@
         <el-button type="primary" icon="el-icon-plus" plain @click="showChange"
           >添加</el-button
         >
-        <el-button type="success" icon="el-icon-edit" plain>修改</el-button>
+        <el-button
+          type="success"
+          icon="el-icon-edit"
+          plain
+          @click="modifyCourse"
+          >修改</el-button
+        >
         <el-button
           type="danger"
           icon="el-icon-delete"
@@ -29,7 +35,7 @@
       </div>
       <el-table
         ref="multipleTable"
-        :data="tableData"
+        :data="search"
         tooltip-effect="dark"
         style="width: 100%"
         border
@@ -75,9 +81,9 @@
         >
         </el-table-column>
       </el-table>
-      <div>共 {{ totalRow }} 条</div>
+      <div class="totalCount">共 {{ totalRow }} 条</div>
     </div>
-    <AddCourse v-show="dialog_visible" />
+    <AddCourse v-show="dialog_visible"  :courseSelected="multipleSelection" :isModify='isModify'/>
   </div>
 </template>
 
@@ -94,9 +100,16 @@ export default {
   data() {
     return {
       input: "",
+      isModify: false,
       checked: true,
       dialog_visible: false,
       courseProvision_visible: true,
+      schoolInput: '',
+      collegeInput: '',
+      majorInput: '',
+      classNameInput: '',
+      courseInput: '',
+      teacherInput: '',
       tableData: [
         {
           term: "2021年秋",
@@ -151,7 +164,24 @@ export default {
       // tableDatakey: 0,
     };
   },
+  // computed: {
+  //   isModifyChange: function() {
+  //     return this.isModify;
+  //   }
+  // },
   methods: {
+    // 修改课程
+    modifyCourse() {
+      if (this.multipleSelection.length === 0) {
+        alert("请选择需要修改的课程");
+      } else if (this.multipleSelection.length > 1) {
+        alert("一次只能选择一个课程修改");
+      } else {
+        this.isModify = true;
+        this.courseProvision_visible = false;
+        this.dialog_visible = true;
+      }
+    },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach((row) => {
@@ -181,7 +211,9 @@ export default {
       // 1、获取选中的数组元素
       // 2、删除原来数据数组与1中获得的元素相同的元素
       // this.tableDataKey = Math.random();
-      let newdataTable = this.tableData.filter((item) => !_this.multipleSelection.includes(item));
+      let newdataTable = this.tableData.filter(
+        (item) => !_this.multipleSelection.includes(item)
+      );
       // console.log(
       //   newdataTable
       // );
@@ -195,12 +227,25 @@ export default {
     totalRow() {
       return this.tableData.length;
     },
+    // 查询课程  --- 模糊匹配
+    search: function() {
+      let _this = this;
+      // 当没有输入任何查询条件时
+      if(!this.schoolInput && !this.collegeInput && !this.majorInput && !this.classNameInput && !this.teacherInput && !this.collegeInput) {
+          return this.tableData;
+      }
+      // 查询条件为学校时
+      return this.tableData.filter(function(v) {
+        return v.school.includes(_this.schoolInput);
+      })
+      
+    },
   },
 
   mounted() {
     let _this = this;
     pubsub.subscribe("addNewCourse", function (msgName, data) {
-      console.log(data);
+      // console.log('这是传过来的数据：' + data.school + data.term);
       let tableDataObj = {};
 
       tableDataObj.school = data.school;
@@ -221,7 +266,7 @@ export default {
         }
       }
 
-      console.log(tableDataObj);
+      // console.log(tableDataObj);
       _this.tableData.unshift(tableDataObj);
       _this.dialog_visible = false;
       _this.courseProvision_visible = true;
@@ -260,5 +305,9 @@ export default {
 
 .opration {
   margin-bottom: 10px;
+}
+/* 总共多少条数据的样式 */
+.totalCount {
+  padding-top: 20px;
 }
 </style>

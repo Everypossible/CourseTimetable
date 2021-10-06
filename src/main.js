@@ -1,11 +1,15 @@
 import Vue from 'vue'
 import App from './App.vue'
+import VueRouter from 'vue-router'
+import router from './router'
 // 按需引入组件
 import {Container, Header, Aside, Footer, Main, Button, Input, Checkbox, Table, TableColumn, Row, Col, Select, Option, Dialog, Form, FormItem} from 'element-ui'
 // 引入下载的阿里巴巴图标
 import './assets/icons/iconfont.css'
 
 Vue.config.productionTip = false
+
+Vue.use(VueRouter)
 
 Vue.component(Container.name, Container)
 Vue.component(Header.name, Header)
@@ -27,4 +31,5 @@ Vue.component(FormItem.name, FormItem)
 
 new Vue({
   render: h => h(App),
+  router: router,
 }).$mount('#app')

@@ -1,7 +1,7 @@
 <template>
   <div class="addCourse">
     <header class="addCourseHeader">添加课程编排</header>
-    <hr>
+    <hr />
     <div class="addCourseMain">
       <el-form
         :model="addCourseForm"
@@ -12,7 +12,11 @@
         label-position="left"
       >
         <el-form-item label="学校" prop="school">
-          <el-select v-model="addCourseForm.school" placeholder="请选择学校" style="width:500px">
+          <el-select
+            v-model="addCourseForm.school"
+            placeholder="请选择学校"
+            style="width: 500px"
+          >
             <!-- <el-option label="广东工业大学" value="广东工业大学"></el-option> -->
             <el-option
               v-for="item in schools"
@@ -28,7 +32,7 @@
             placeholder="请选择学院"
             multiple
             @change="collegeSelected"
-            style="width:500px"
+            style="width: 500px"
           >
             <el-option
               v-for="item in colleges"
@@ -43,7 +47,7 @@
             v-model="addCourseForm.major"
             multiple
             placeholder="请选择专业"
-            style="width:500px"
+            style="width: 500px"
           >
             <el-option
               v-for="item in majors"
@@ -58,20 +62,26 @@
             <el-button type="primary" plain @click="classNameFormVisible = true"
               >选择</el-button
             >
-            <span v-for="item in addCourseForm.classNameSelected" :key="item.className">{{ item.className }}</span>
-            <el-dialog title="选择班级" :visible.sync="classNameFormVisible">
+            <span
+              class="selected"
+              v-for="item in addCourseForm.classNameSelected"
+              :key="item.className"
+              >{{ item.className }}</span
+            >
+            <el-dialog class="classDialog" title="选择班级" :visible.sync="classNameFormVisible" width="600px">
               <el-table
+              class="classTable"
                 :data="classNameTableData"
                 border
-                style="width: 100%"
+                style="width: 600px"
                 ref="multipleTable"
                 @selection-change="handleSelectionChange"
               >
                 <el-table-column type="selection" width="55"> </el-table-column>
-                <el-table-column type="index" label="序号"> </el-table-column>
-                <el-table-column prop="className" label="班级" width="150">
+                <el-table-column type="index" label="序号" width="55"> </el-table-column>
+                <el-table-column prop="className" label="班级" width="180">
                 </el-table-column>
-                <el-table-column prop="year" label="年界" width="150" sortable>
+                <el-table-column prop="year" label="年界" sortable>
                 </el-table-column>
               </el-table>
               <div slot="footer" class="dialog-footer">
@@ -87,7 +97,7 @@
           <el-select
             v-model="addCourseForm.courseName"
             placeholder="请选择课程"
-            style="width:500px"
+            style="width: 500px"
           >
             <el-option
               v-for="item in coursesName"
@@ -98,7 +108,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="教师" prop="teacher">
-          <el-select v-model="addCourseForm.teacher" placeholder="请选择教师" style="width:500px">
+          <el-select
+            v-model="addCourseForm.teacher"
+            placeholder="请选择教师"
+            style="width: 500px"
+          >
             <el-option
               v-for="item in teachers"
               :key="item.value"
@@ -112,12 +126,19 @@
             <el-button type="primary" plain @click="homeworkFormVisible = true"
               >选择</el-button
             >
-            <span v-for="item in addCourseForm.homeworkSelected" :key="item.homework">{{ item.homework }}</span>
-            <el-dialog title="选择作业表" :visible.sync="homeworkFormVisible">
+            <span
+            class="selected"
+              v-for="item in addCourseForm.homeworkSelected"
+              :key="item.homework"
+            >
+              {{ item.homework }}
+            </span>
+            <el-dialog class="homeworkDialog" title="选择作业表" :visible.sync="homeworkFormVisible" width="600px">
               <el-table
+              class="homeworkTable"
                 :data="homeworkTableData"
                 border
-                style="width: 100%"
+                style="width: 600px"
                 ref="multipleTable"
                 @selection-change="handleSelectionChange"
               >
@@ -132,14 +153,13 @@
                   type="index"
                   label="序号"
                   :resizable="false"
-                  width="100px"
+                  width="140"
                   align="center"
                 >
                 </el-table-column>
                 <el-table-column
                   prop="homework"
                   label="作业表"
-                  width="215px"
                   :resizable="false"
                   align="center"
                 >
@@ -194,7 +214,9 @@
           >
           <!-- 重置表单 -->
           <!-- <el-button @click="resetForm('addCourseForm')" style="margin-left: 40px">返回</el-button> -->
-           <el-button @click="hideChange" style="margin-left: 40px">返回</el-button>
+          <el-button @click="hideChange" style="margin-left: 40px"
+            >返回</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -206,17 +228,16 @@ import pubsub from "pubsub-js";
 export default {
   data() {
     return {
-      // 引入组价时的数据
       addCourseForm: {
-        school: '',
+        school: "",
         college: [],
         major: [],
-        courseName: '',
-        teacher: '',
+        courseName: "",
+        teacher: "",
         classNameSelected: [],
         homeworkSelected: [],
-        year: '',
-        term: '',
+        year: "",
+        term: "",
       },
       schools: [
         {
@@ -343,12 +364,13 @@ export default {
       ],
     };
   },
+  props: ["courseSelected", "isModify"],
   methods: {
     //table表格组件多选自带的方法
     handleSelectionChange(val) {
       this.multipleSelection = val;
-    //   console.log(val[0].className);
-    //   console.log(this.multipleSelection);
+      //   console.log(val[0].className);
+      //   console.log(this.multipleSelection);
     },
     //自己定义的方法
     collegeSelected(val) {
@@ -394,9 +416,12 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // this.$options.methods.resetForm(formName);
-          pubsub.publish('addNewCourse', this.addCourseForm);     
+          // console.log('这是准备传过来的数据：' + this.addCourseForm.school);
+          pubsub.publish("addNewCourse", this.addCourseForm);
+          this.isModify = false;
+          // console.log(this.addCourseForm.school);
           // 确认提交添加的课程后清空表单域
-          this.$refs.addCourseForm.resetFields();
+          // this.$refs.addCourseForm.resetFields();
           alert("submit!");
           // _this.
         } else {
@@ -405,18 +430,19 @@ export default {
         }
       });
     },
-    classNameFormSubmit(){
-        this.classNameFormVisible = false;
-        this.addCourseForm.classNameSelected = Array.from(this.multipleSelection);
-        console.log(this.multipleSelection[0].className);
+    classNameFormSubmit() {
+      this.classNameFormVisible = false;
+      this.addCourseForm.classNameSelected = Array.from(this.multipleSelection);
+      console.log(this.multipleSelection[0].className);
     },
     homeworkFormSubmit() {
-        this.homeworkFormVisible = false;
-        this.addCourseForm.homeworkSelected = Array.from(this.multipleSelection);
+      this.homeworkFormVisible = false;
+      this.addCourseForm.homeworkSelected = Array.from(this.multipleSelection);
     },
-    hideChange(){
-      pubsub.publish('showCourseProvision', true);
-    }
+    hideChange() {
+      this.isModify = false;
+      pubsub.publish("showCourseProvision", true);
+    },
   },
 
   computed: {
@@ -425,6 +451,130 @@ export default {
     },
     homeworkTotalRow() {
       return this.homeworkTableData.length;
+    },
+  },
+
+  watch: {
+    isModify: {
+      handler(newVal) {
+        this.isModify = newVal;
+
+        if (newVal) {
+          // 判断已经按下了修改按钮
+          console.log(this.isModify);
+          if (this.isModify) {
+            this.addCourseForm.school = this.courseSelected[0].school;
+            this.addCourseForm.term = this.courseSelected[0].term;
+            this.addCourseForm.courseName = this.courseSelected[0].courseName;
+            this.addCourseForm.teacher = this.courseSelected[0].teacherName;
+            console.log("老师的名字是：" + this.addCourseForm.teacher);
+
+            console.log("选中的课程名称：" + this.addCourseForm.courseName);
+
+            // 设置 下拉框 多选 默认值
+            this.addCourseForm.college.unshift(this.courseSelected[0].college);
+
+            console.log(
+              "选中的学院名称：" + this.addCourseForm.college[0].value
+            );
+
+            this.addCourseForm.major.unshift(this.courseSelected[0].major);
+            console.log("选中的专业名称是：" + this.addCourseForm.major[0]);
+            let claName = {};
+            claName.className = this.courseSelected[0].className;
+            this.addCourseForm.classNameSelected.unshift(claName);
+            console.log(
+              "选中的班级是：" + this.addCourseForm.classNameSelected[0]
+            );
+            let howo = {};
+            howo.homework = this.courseSelected[0].homework;
+            this.addCourseForm.homeworkSelected.unshift(howo);
+            console.log(
+              "选中的作业表是：" + this.addCourseForm.homeworkSelected[0]
+            );
+          }
+        }
+      },
+    },
+    courseSelected: {
+      deep: true,
+      handler() {
+        // // 判断已经按下了修改按钮
+        // console.log(this.isModify);
+        // if (this.isModify) {
+        //   // let _this = this;
+        //   // console.log(this.courseSelected);
+        //   this.addCourseForm.school = this.courseSelected[0].school;
+        //   this.addCourseForm.term = this.courseSelected[0].term;
+        //   this.addCourseForm.courseName = this.courseSelected[0].courseName;
+        //   this.addCourseForm.teacher = this.courseSelected[0].teacherName;
+        //   console.log("老师的名字是：" + this.addCourseForm.teacher);
+        //   // console.log(this.addCourseForm.term);
+        //   console.log("选中的课程名称：" + this.addCourseForm.courseName);
+        //   // let colle = {}
+        //   // colle.value =  this.courseSelected[0].college
+        //   // colle.label =  this.courseSelected[0].college
+        //   // this.addCourseForm.college[0] = colle
+        //   // 设置 下拉框 多选 默认值
+        //   this.addCourseForm.college.unshift(this.courseSelected[0].college);
+        //   // this.addCourseForm.college[0].label = this.courseSelected[0].college
+        //   console.log("选中的学院名称：" + this.addCourseForm.college[0].value);
+        //   // this.addCourseForm.major[0] = this.courseSelected[0].major;
+        //   this.addCourseForm.major.unshift(this.courseSelected[0].major);
+        //   console.log("选中的专业名称是：" + this.addCourseForm.major[0]);
+        //   // this.addCourseForm.classNameSelected[0] = this.courseSelected[0].className;
+        //   let claName = {};
+        //   claName.className = this.courseSelected[0].className;
+        //   this.addCourseForm.classNameSelected.unshift(claName);
+        //   console.log(
+        //     "选中的班级是：" + this.addCourseForm.classNameSelected[0]
+        //   );
+        //   // this.addCourseForm.homeworkSelected[0] =
+        //   //   this.courseSelected[0].homework;
+        //   let howo = {};
+        //   howo.homework = this.courseSelected[0].homework;
+        //   this.addCourseForm.homeworkSelected.unshift(howo);
+        //   console.log(
+        //     "选中的作业表是：" + this.addCourseForm.homeworkSelected[0]
+        //   );
+        //   //   if (this.courseSelected.length === 1) {
+        //   //     console.log("进来了");
+        //   //     this.addCourseForm.school = this.courseSelected[0].school;
+        //   //     // console.log(this.courseSelected[0].school);
+        //   //     // console.log(this.addCourseForm.school);
+        //   //     this.addCourseForm.term = this.courseSelected[0].term;
+        //   //     console.log(this.addCourseForm.term);
+        //   //     this.addCourseForm.courseName = this.courseSelected[0].courseName;
+        //   //     this.addCourseForm.teacherName = this.courseSelected[0].teacher;
+        //   //     console.log("进来了2");
+        //   //     // for (let i = 0; i < this.courseSelected.college.length; i++) {
+        //   //     // console.log('进来了3');
+        //   //     this.addCourseForm.college[0] = this.courseSelected[0].college;
+        //   //     // for (let j = 0; j < this.courseSelected.major.length; j++) {
+        //   //     this.addCourseForm.major[0] = this.courseSelected[0].major;
+        //   //     // for (
+        //   //     //   let a = 0;
+        //   //     //   a < this.courseSelected.classNameSelected.length;
+        //   //     //   a++
+        //   //     // ) {
+        //   //     this.addCourseForm.classNameSelected[0] =
+        //   //       this.courseSelected[0].className;
+        //   //     console.log("进来3");
+        //   //     // for (
+        //   //     //   let b = 0;
+        //   //     //   b < this.courseSelected.homeworkSelected.length;
+        //   //     //   b++
+        //   //     // ) {
+        //   //     this.addCourseForm.homeworkSelected[0] = this.courseSelected.homework;
+        //   //     console.log("进来4");
+        //   //     console.log(this.addCourseForm);
+        //   //     // }
+        //   //     // }
+        //   //     // }
+        //   //     // }
+        //   //   }
+        // }
+      },
     },
   },
 };
@@ -439,12 +589,38 @@ export default {
   padding-left: 20px;
 }
 hr {
-    margin-left: -21px;
-    size: 2px;
-    color: rgba(0, 0, 0, 0.2);
+  margin-left: -21px;
+  size: 2px;
+  color: rgba(0, 0, 0, 0.2);
 }
 .addCourseHeader {
-    font-size: 22px;
+  font-size: 22px;
 }
 
+.el-form-item > div .selected {
+  display: inline-block;
+  height: 36px;
+  border: 1px solid black;
+  border-radius: 4px;
+  margin-left: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.dialog-footer span {
+  display: inline-block;
+  margin-right: 410px;
+  /* background-color: blue; */
+}
+
+/* .classDialog ,
+.homeworkDialog {
+  width: 60%;
+  background-color: blue;
+} */
+
+/* .classTable,
+.homeworkTable {
+  width: 100px;
+} */
 </style>

@@ -83,7 +83,7 @@
       </el-table>
       <div class="totalCount">共 {{ totalRow }} 条</div>
     </div>
-    <AddCourse v-show="dialog_visible"  :courseSelected="multipleSelection" :isModify='isModify'/>
+    <AddCourse v-show="dialog_visible"  :courseSelected="multipleSelection" :isModify='isModify' :dialog_visible='dialog_visible'/>
   </div>
 </template>
 

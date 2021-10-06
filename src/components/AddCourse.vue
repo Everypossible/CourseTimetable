@@ -364,7 +364,7 @@ export default {
       ],
     };
   },
-  props: ["courseSelected", "isModify"],
+  props: ["courseSelected", "isModify", "dialog_visible"],
   methods: {
     //table表格组件多选自带的方法
     handleSelectionChange(val) {
@@ -373,6 +373,18 @@ export default {
       //   console.log(this.multipleSelection);
     },
     //自己定义的方法
+    //清空addCourseForm的数据
+    clearAddCourseForm(_this) {
+      _this.addCourseForm.school = '';
+      _this.addCourseForm.college = [];
+      _this.addCourseForm.major = [];
+      _this.addCourseForm.courseName = '';
+      _this.addCourseForm.teacher = '';
+      _this.addCourseForm.classNameSelected = [];
+      _this.addCourseForm.homeworkSelected = [];
+      _this.addCourseForm.year = '';
+      _this.addCourseForm.term = '';
+    },
     collegeSelected(val) {
       const _self = this;
       this.majors.splice(0, this.majors.length);
@@ -419,6 +431,7 @@ export default {
           // console.log('这是准备传过来的数据：' + this.addCourseForm.school);
           pubsub.publish("addNewCourse", this.addCourseForm);
           this.isModify = false;
+          // this.$options.methods.clearAddCourseForm(_this);
           // console.log(this.addCourseForm.school);
           // 确认提交添加的课程后清空表单域
           // this.$refs.addCourseForm.resetFields();
@@ -440,8 +453,14 @@ export default {
       this.addCourseForm.homeworkSelected = Array.from(this.multipleSelection);
     },
     hideChange() {
+      // let _this = this;
       this.isModify = false;
       pubsub.publish("showCourseProvision", true);
+      // console.log('清空表单前');
+      // this.$options.methods.clearAddCourseForm(_this);
+      // console.log('清空表单后');
+      this.$refs.addCourseForm.resetFields();
+      console.log(this.addCourseForm);
     },
   },
 
@@ -455,6 +474,19 @@ export default {
   },
 
   watch: {
+    //当添加或修改弹窗显示时
+    dialog_visible: {
+      handler() {
+        if(this.dialog_visible) {
+          this.$refs.addCourseForm.resetFields();
+          // this.addCourseForm.classNameSelected.splice(0, this.addCourseForm.classNameSelected.length);
+          // this.addCourseForm.homeworkSelected.splice(0, this.addCourseForm.homeworkSelected.length);
+          this.addCourseForm.classNameSelected.length = 0;
+          this.addCourseForm.homeworkSelected.length  = 0;
+        }
+      }
+    },
+    //删除表格数据
     isModify: {
       handler(newVal) {
         this.isModify = newVal;
